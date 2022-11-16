@@ -23,11 +23,15 @@ export class Transaction extends BaseEntity {
   @CreateDateColumn()
   createdAt: Date
 
-  @ManyToOne(() => Account, (account) => account.transactionsOrigin)
+  @ManyToOne(() => Account, (account) => account.transactionsOrigin, {
+    eager: true
+  })
   @JoinColumn({ name: "debitedAccountId" })
   accountOrigin: Account
 
-  @ManyToOne(() => Account, (account) => account.transactionsDestiny)
+  @ManyToOne(() => Account, (account) => account.transactionsDestiny, {
+    eager: true
+  })
   @JoinColumn({ name: "creditedAccountId" })
   accountDestiny: Account
 }

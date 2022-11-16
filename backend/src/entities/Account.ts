@@ -20,12 +20,18 @@ export class Account extends BaseEntity {
   })
   balance: number
 
-  @OneToOne(() => User, (user) => user.account)
+  @OneToOne(() => User, (user) => user.account, {
+    cascade: true
+  })
   user: User
 
-  @OneToMany(() => Transaction, (transaction) => transaction.accountOrigin)
+  @OneToMany(() => Transaction, (transaction) => transaction.accountOrigin, {
+    cascade: true
+  })
   transactionsOrigin: Transaction[]
 
-  @OneToMany(() => Transaction, (transaction) => transaction.accountOrigin)
+  @OneToMany(() => Transaction, (transaction) => transaction.accountDestiny, {
+    cascade: true
+  })
   transactionsDestiny: Transaction[]
 }

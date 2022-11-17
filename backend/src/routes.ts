@@ -38,7 +38,7 @@ routes.get('/accounts', getAccounts);
 /**
  * Rotas para Transaction
  */
-routes.get('/transactions', get_Transactions);
+routes.get('/transactions', authMiddleware, get_Transactions);
 routes.post('/accomplish_transaction', authMiddleware, accomplish_transaction);
 
 export default routes;

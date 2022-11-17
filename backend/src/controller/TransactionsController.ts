@@ -4,10 +4,41 @@ import { transactionRepository } from '../repositories/transactionRepository';
 import { userRepository } from "../repositories/userRepository";
 
 export const get_Transactions = async (req: Request, res: Response) => {
-  const transactions = await transactionRepository.find();
+  const user = req.user;
 
-  return res.json(transactions);
+  // Retorna as transações Enviadas "Cash-out"
+  const cash_out = await transactionRepository.find({
+    where: {
+      accountOrigin: {
+        id: user.account?.id
+      }
+    }
+  });
+
+  // Retorna as transações Recebidas "Cash-in"
+  const cash_in = await transactionRepository.find({
+    where: {
+      accountDestiny: {
+        id: user.account?.id
+      }
+    }
+  });
+
+  return res.json([
+    {
+      "user": {
+        "id": user.id,
+        "username": user.username,
+        "cash_out": cash_out,
+        "cash_in": cash_in
+      }
+    }
+  ]);
 };
+
+export const details_transaction = async (req: Request, res: Response) => {
+
+}
 
 export const accomplish_transaction = async (req: Request, res: Response) => {
   const { value, username } = req.body;

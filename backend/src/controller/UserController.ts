@@ -67,7 +67,7 @@ export const createUser = async (req: Request, res: Response) => {
 
 export const getProfile = async (req: Request, res: Response) => {
 
-  return res.json(req.user);
+  return res.json([req.user]);
 }
 
 export const getUser = async (req: Request, res: Response) => {

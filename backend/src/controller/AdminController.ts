@@ -2,9 +2,9 @@ import { Request, Response } from "express";
 import { userRepository } from "../repositories/userRepository";
 
 export const getUsers = async (req: Request, res: Response) => {
-  const users = await userRepository.find();
-
+  
   try {
+    const users = await userRepository.find();
     return res.json(users);
 
   } catch (error) {

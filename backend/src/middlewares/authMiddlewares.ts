@@ -16,17 +16,23 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
 
   const token = authorization.split(' ')[1];
 
-  const { id } = jwt.verify(token, process.env.JWT_PASSWORD ?? '') as JwtPayload;
+  try {
+    const { id } = jwt.verify(token, process.env.JWT_PASSWORD ?? '') as JwtPayload;
+    const user = await userRepository.findOneBy({ id });
 
-  const user = await userRepository.findOneBy({ id });
+    if (!user) {
+      return res.status(400).json({ message: 'Usuário não Autorizado!' });
+    }
 
-  if (!user) {
-    return res.status(400).json({ message: 'Usuário não Autorizado!' });
+    const { password: _, ...loggedUser } = user;
+    req.user = loggedUser;
+    req.account = { id: loggedUser.account.id }
+
+    next();
+
+  } catch (error) {
+    return res.status(400).json({ message: 'Token Espirado!' });
+
   }
 
-  const { password: _, ...loggedUser } = user;
-
-  req.user = loggedUser;
-  
-  next();
 }

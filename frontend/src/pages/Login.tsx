@@ -1,12 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 
 import logo from '../assets/logoWrite.png';
 import { Link } from 'react-router-dom';
 import api from 'services/api';
 
+import { AuthContext } from 'context/auth';
+
 export function Login() {
+  //const { authenticated, login } = useContext(AuthContext)
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+
+  function handlerLogin() {
+  
+    console.log("submit", { username, password });
+    //login()
+    /*
+    if (username.length > 3 && password.length > 3) {
+
+      
+      try {
+        const { data } = await api.post('/login', {
+          "username": username,
+          "password": password
+        });
+
+        console.log(data);
+        <Link to={'/profile'} />
+        
+      } catch (error) {
+
+        console.log(error);
+        alert(error);
+      }
+
+    }
+    */
+  }
 
   return (
     <div className="min-h-screen flex flex-row items-center bg-current">
@@ -28,25 +59,34 @@ export function Login() {
           <img className='w-14' src={logo} alt="logo" />
         </div>
 
-        <form action=''>
+        <form onSubmit={handlerLogin}>
           <div className='mb-4'>
             <input
               className='appearance-none block w-full px-10 py-3 leading-tight text-white
               bg-black border-2 border-black focus:border-indigo-700
-                      rounded focus:outline-none' type="text" placeholder='Username' />
+                      rounded focus:outline-none' 
+                      type="text" 
+                      placeholder='Username'
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                       />
           </div>
           <div className='mb-4'>
             <input className='appearance-none block w-full px-10 py-3 leading-tight text-white
                       bg-black border-2 border-black focus:border-indigo-700
-                      rounded focus:outline-none' type="password" placeholder='senha' />
+                      rounded focus:outline-none' 
+                      type="password" 
+                      placeholder='senha'
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      />
           </div>
 
           <div className='mb-4' >
-            <Link to={'/profile'}>
-
-              <button className='inline-block w-full px-8 py-4 leading-none text-white bg-indigo-700
-                            hover:bg-indigo-900 font-semibold rounded shadow'>Entrar</button>
-            </Link>
+            <button className='inline-block w-full px-8 py-4 leading-none text-white bg-indigo-700
+                            hover:bg-indigo-900 font-semibold rounded shadow' 
+                            type='submit'
+                            >Entrar</button>
           </div>
 
           <div className='nb-4'>
@@ -61,4 +101,3 @@ export function Login() {
     </div>
   );
 }
-//https://ng.cash/_nuxt/img/ngcash.5b8db70.png

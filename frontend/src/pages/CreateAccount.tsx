@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import { Link } from 'react-router-dom';
 import { FiArrowLeft } from "react-icons/fi";
@@ -11,37 +11,28 @@ export function CreateAccount() {
   const [password, setPassword] = useState('');
 
   async function handleCreateAccount() {
+
     if (username.length < 3 || username === '') {
-      //return alert('Seu usuário deve ter no mínimo três caracteres!');
+      return alert('Seu usuário deve ter no mínimo três caracteres!');
     }
 
-    try {
-      const { data } = await api.post('/create_user', {
-        "username": username,
-        "password": password
-      });
+    const { data } = await api.post('/create_user', {
+      "username": username,
+      "password": password
+    });
 
-      /*
+    try {
+
+      alert(data.message);
       <Link to={'/'} />
+
       return data;
-      */
-     console.log(data);
+
     } catch (error) {
-      console.log(error)
+      alert(data.message)
     }
 
   }
-
-  useEffect(() => {
-    async function getAccount() {
-      const { data } = await api.get("/accounts");
-
-      console.log(data)
-      return data;
-    }
-
-    getAccount();
-  }, []);
 
   return (
     <div className="min-h-screen flex flex-row items-center bg-current">
@@ -58,8 +49,9 @@ export function CreateAccount() {
                         rounded focus:outline-none'
               type="text"
               placeholder='Username'
+              value={username} 
               onChange={e => setUsername(e.target.value)}
-              value={username} />
+              />
 
           </div>
           <div className='mb-4'>
@@ -68,8 +60,9 @@ export function CreateAccount() {
                         rounded focus:outline-none'
               type="password"
               placeholder='senha'
+              value={password} 
               onChange={e => setPassword(e.target.value)}
-              value={password} />
+              />
 
           </div>
 

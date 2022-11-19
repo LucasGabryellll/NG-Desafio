@@ -16,7 +16,9 @@ export function Header() {
           <Link className="text-white" to={'/details_transactions'}>HISTÓRICO</Link>
         </div>
 
-        <Button variant="lightRed">Sair</Button>
+        <Link to={'/'}>
+          <Button variant="lightRed">Sair</Button>
+        </Link>
       </div>
     </nav>
   );

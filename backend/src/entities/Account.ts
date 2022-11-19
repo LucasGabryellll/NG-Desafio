@@ -18,7 +18,7 @@ export class Account extends BaseEntity {
   @Column({
     type: 'float'
   })
-  balance?: number
+  balance: number
 
   @OneToOne(() => User, (user) => user.account, {
     cascade: true

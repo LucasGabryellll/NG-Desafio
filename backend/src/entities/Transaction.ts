@@ -33,5 +33,5 @@ export class Transaction extends BaseEntity {
     eager: true
   })
   @JoinColumn({ name: "creditedAccountId" })
-  accountDestiny?: Account
+  accountDestiny: Account
 }

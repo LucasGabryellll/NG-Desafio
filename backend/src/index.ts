@@ -5,10 +5,17 @@ import { AppDataSource } from "./data-source";
 import express from "express";
 import * as bodyParser from "body-parser";
 import routes from "./routes";
+import cors from 'cors';
 
 AppDataSource.initialize().then(() => {
   const app = express();
+  const allowedOrigins = ['http://localhost:3000'];
 
+  const options: cors.CorsOptions = {
+    origin: allowedOrigins
+  };
+
+  app.use(cors(options));
   app.use(bodyParser.json());
   app.use(routes);
 

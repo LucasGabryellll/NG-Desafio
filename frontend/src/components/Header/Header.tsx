@@ -1,8 +1,20 @@
+import { useContext } from 'react';
 import { Button } from "../Button";
 import { Logo } from "./Logo";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+
+import { AuthContext } from 'context/auth';
 
 export function Header() {
+  const userContext = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  function handleLogout() {
+    userContext?.logout();
+
+    navigate('/');
+  }
+
   return (
     <nav className="w-full h-20 bg-zinc-900 border-b border-x-gray-900">
       <div className="w-full h-full max-w-7xl m-auto flex items-center justify-between">
@@ -16,9 +28,8 @@ export function Header() {
           <Link className="text-white" to={'/details_transactions'}>HISTÓRICO</Link>
         </div>
 
-        <Link to={'/'}>
-          <Button variant="lightRed">Sair</Button>
-        </Link>
+        <Button variant="lightRed" onPress={handleLogout}>Sair</Button>
+
       </div>
     </nav>
   );

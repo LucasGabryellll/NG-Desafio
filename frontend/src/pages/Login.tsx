@@ -1,42 +1,33 @@
 import React, { useState, useContext } from 'react';
 
 import logo from '../assets/logoWrite.png';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import api from 'services/api';
 
 import { AuthContext } from 'context/auth';
 
 export function Login() {
-  //const { authenticated, login } = useContext(AuthContext)
+  const userContext = useContext(AuthContext);
+  const navigation = useNavigate();
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  function handlerLogin() {
-  
-    console.log("submit", { username, password });
-    //login()
-    /*
-    if (username.length > 3 && password.length > 3) {
+  async function handlerLogin() {
 
+    try {
+      const { data } = await api.post('/login', {
+        "username": username,
+        "password": password
+      });
+
+      userContext?.signInContext(username, password, data, data?.token);
+      userContext?.setToken(data?.token);
       
-      try {
-        const { data } = await api.post('/login', {
-          "username": username,
-          "password": password
-        });
-
-        console.log(data);
-        <Link to={'/profile'} />
-        
-      } catch (error) {
-
-        console.log(error);
-        alert(error);
-      }
-
+      navigation('/profile');
+    } catch (e: any) {
+      alert(e.response.data.message);
     }
-    */
   }
 
   return (
@@ -59,34 +50,34 @@ export function Login() {
           <img className='w-14' src={logo} alt="logo" />
         </div>
 
-        <form onSubmit={handlerLogin}>
+        <div>
           <div className='mb-4'>
             <input
               className='appearance-none block w-full px-10 py-3 leading-tight text-white
               bg-black border-2 border-black focus:border-indigo-700
-                      rounded focus:outline-none' 
-                      type="text" 
-                      placeholder='Username'
-                      value={username}
-                      onChange={(e) => setUsername(e.target.value)}
-                       />
+                      rounded focus:outline-none'
+              type="text"
+              placeholder='Username'
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
           </div>
           <div className='mb-4'>
             <input className='appearance-none block w-full px-10 py-3 leading-tight text-white
                       bg-black border-2 border-black focus:border-indigo-700
-                      rounded focus:outline-none' 
-                      type="password" 
-                      placeholder='senha'
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      />
+                      rounded focus:outline-none'
+              type="password"
+              placeholder='senha'
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
           </div>
 
           <div className='mb-4' >
             <button className='inline-block w-full px-8 py-4 leading-none text-white bg-indigo-700
-                            hover:bg-indigo-900 font-semibold rounded shadow' 
-                            type='submit'
-                            >Entrar</button>
+                            hover:bg-indigo-900 font-semibold rounded shadow'
+              type='submit'
+              onClick={handlerLogin}>Entrar</button>
           </div>
 
           <div className='nb-4'>
@@ -96,8 +87,8 @@ export function Login() {
               </Link>
             </p>
           </div>
-        </form>
+        </div>
       </div>
-    </div>
+    </div >
   );
 }

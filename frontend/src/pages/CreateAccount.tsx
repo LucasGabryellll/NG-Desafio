@@ -12,24 +12,20 @@ export function CreateAccount() {
 
   async function handleCreateAccount() {
 
-    if (username.length < 3 || username === '') {
-      return alert('Seu usuário deve ter no mínimo três caracteres!');
-    }
-
-    const { data } = await api.post('/create_user', {
-      "username": username,
-      "password": password
-    });
-
     try {
 
+      const { data } = await api.post('/create_user', {
+        "username": username,
+        "password": password
+      });
+
       alert(data.message);
-      <Link to={'/'} />
 
-      return data;
+      setUsername('');
+      setPassword('');
 
-    } catch (error) {
-      alert(data.message)
+    } catch (error: any) {
+      alert(error.response.data.message);
     }
 
   }
@@ -41,7 +37,7 @@ export function CreateAccount() {
           <img className='w-14 ml-4' src={logo} alt="logo" />
           <h1 className='text-black font-bold text-xl'>CRIE SUA CONTA</h1>
         </div>
-        <form action=''>
+        <div>
           <div className='mb-4'>
             <input
               className='appearance-none block w-full px-10 py-3 leading-tight text-white
@@ -49,9 +45,9 @@ export function CreateAccount() {
                         rounded focus:outline-none'
               type="text"
               placeholder='Username'
-              value={username} 
+              value={username}
               onChange={e => setUsername(e.target.value)}
-              />
+            />
 
           </div>
           <div className='mb-4'>
@@ -60,9 +56,9 @@ export function CreateAccount() {
                         rounded focus:outline-none'
               type="password"
               placeholder='senha'
-              value={password} 
+              value={password}
               onChange={e => setPassword(e.target.value)}
-              />
+            />
 
           </div>
 
@@ -79,7 +75,7 @@ export function CreateAccount() {
               </button>
             </Link>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );

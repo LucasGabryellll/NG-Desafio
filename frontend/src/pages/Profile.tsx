@@ -25,7 +25,6 @@ export function Profile() {
     });
 
     setUserInformation(data);
-    console.log(data)
   }
 
   useEffect(() => {

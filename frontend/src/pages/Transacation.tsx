@@ -10,13 +10,15 @@ import api from "services/api";
 export function Transaction() {
   const userContext = useContext(AuthContext);
   const [userAccountDestiny, setUserAccountDestiny] = useState('');
+  const [password, setPassword] = useState('');
   const [valueTransafery, setValueTransafery] = useState(0.0);
 
   async function newTransfer() {
     try {
       const { data } = await api.post('/accomplish_transaction', {
         "value": valueTransafery,
-        "username": userAccountDestiny
+        "username": userAccountDestiny,
+        "password": password
       }, {
         headers: {
           'Authorization': `Bearer ${userContext?.token}`
@@ -26,7 +28,8 @@ export function Transaction() {
       alert(data.message);
       setUserAccountDestiny('');
       setValueTransafery(0);
-      
+      setPassword('');
+
     } catch (error: any) {
       alert(error.response.data.message);
     }
@@ -67,6 +70,18 @@ export function Transaction() {
                 placeholder='Valor R$'
                 value={valueTransafery}
                 onChange={e => setValueTransafery(parseFloat(e.target.value))}
+              />
+
+            </div>
+
+            <div className='mb-4'>
+              <input className='appearance-none block w-full px-10 py-3 leading-tight text-white
+                        bg-black border-2 border-black focus:border-indigo-700
+                        rounded focus:outline-none'
+                type="password"
+                placeholder='Confirme sua senha'
+                value={password}
+                onChange={e => setPassword(e.target.value)}
               />
 
             </div>

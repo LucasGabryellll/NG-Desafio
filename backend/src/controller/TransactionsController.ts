@@ -3,6 +3,8 @@ import { accountRepository } from '../repositories/accountRepository';
 import { transactionRepository } from '../repositories/transactionRepository';
 import { userRepository } from "../repositories/userRepository";
 
+import bcrypt from 'bcrypt';
+
 export const get_Transactions = async (req: Request, res: Response) => {
   const user = req.user;
 
@@ -41,7 +43,7 @@ export const details_transaction = async (req: Request, res: Response) => {
 }
 
 export const accomplish_transaction = async (req: Request, res: Response) => {
-  const { value, username } = req.body;
+  const { value, username, password } = req.body;
 
   const accountDebited = req.user;
   const balanceAccountDebited = req.user.account?.balance ?? 0;
@@ -50,6 +52,10 @@ export const accomplish_transaction = async (req: Request, res: Response) => {
 
   if (accountDebited.username == username) {
     return res.status(400).json({ message: "Não é possível realizar uma transferência para sua própria conta!" });
+  }
+
+  if (value <= 0) {
+    return res.status(400).json({ message: "O valor mínimo de transferência é de R$ 1,00" });
   }
 
   // Retorna a conta do usuario que vai realizar o Cash-out.
@@ -65,6 +71,14 @@ export const accomplish_transaction = async (req: Request, res: Response) => {
       username: username
     }
   });
+
+  const userExist = await userRepository.findOneBy({ username: req.user.username });
+  const { ...t } = userExist;
+  const verifyPassword = await bcrypt.compare(password, t?.password);
+
+  if (!verifyPassword) {
+    return res.status(400).json({ message: "Senha incorreta, verifique sua senha tente novamente"});
+  }
 
   if (userCrebited != null) {
     if (value > balanceAccountDebited) {
@@ -86,7 +100,6 @@ export const accomplish_transaction = async (req: Request, res: Response) => {
       await accountRepository.update(userAccountCrebited?.id ?? '', {
         balance: userAccountCrebited?.balance + value
       });
-
 
       await transactionRepository.save({
         value: value,

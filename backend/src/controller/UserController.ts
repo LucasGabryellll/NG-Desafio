@@ -70,6 +70,24 @@ export const getProfile = async (req: Request, res: Response) => {
   return res.json([req.user]);
 }
 
+export const getUserByIdAccount = async (req: Request, res: Response) => {
+  const { id } = req.body;
+
+  try {
+    const user = await userRepository.findOne({
+      where: {
+        account: {
+          id: id
+        }
+      }
+    });
+
+    return res.json([user]);
+  } catch (error) {
+    return res.status(400).json(error);
+  }
+}
+
 export const getUser = async (req: Request, res: Response) => {
   const { username } = req.body
 

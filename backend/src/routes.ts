@@ -2,7 +2,7 @@ import { Router, Request, Response } from "express";
 
 import { getUsers } from "./controller/AdminController";
 
-import { createUser, getProfile, getUser } from './controller/UserController';
+import { createUser, getProfile, getUser, getUserByIdAccount } from './controller/UserController';
 
 import { loginUser } from './controller/LoginController';
 import { authMiddleware } from "./middlewares/authMiddlewares";
@@ -24,7 +24,7 @@ routes.get('/all_users', authMiddleware, getUsers);
 routes.post('/create_user', createUser);
 routes.get('/profile', authMiddleware, getProfile);
 routes.get('/user', authMiddleware, getUser);
-
+routes.post('/userById', getUserByIdAccount);
 /**
  * Login
  */
